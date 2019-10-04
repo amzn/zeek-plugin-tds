@@ -1,0 +1,40 @@
+## Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+## SPDX-License-Identifier: BSD-3-Clause
+
+######################################
+## Generated for all the TDS headers #
+######################################
+## c: The connection the TDS communication is part of.
+## is_orig: True if this reflects originator-side activity.
+## command: uint16 of either request/response
+## index: index# of the packet.
+## 
+event tds%(c: connection, is_orig: bool,
+            command: count
+            %);
+
+############################################
+## Generated for the remote procedure call #
+############################################
+## c: The connection the TDS communication is part of.
+## is_orig: True if this reflects originator-side activity.
+## product_name: product name.
+## serial_number: serial number.
+## 
+event tds_rpc%(c: connection, is_orig: bool,
+                procedure_name: string,
+                parameters: string
+                %);
+
+####################################
+## Generated for the identity info #
+####################################
+## c: The connection the TDS communication is part of.
+## is_orig: True if this reflects originator-side activity.
+## product_name: product name.
+## serial_number: serial number.
+## 
+event tds_sql_batch%(c: connection, is_orig: bool,
+                    header_type: count,
+                    query: string
+                    %);
