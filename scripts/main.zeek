@@ -1,9 +1,10 @@
-## Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-## SPDX-License-Identifier: BSD-3-Clause
+##! Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+##! SPDX-License-Identifier: BSD-3-Clause
 
 ##! Implements base functionality for TDS analysis.
 ##! Generates the tds.log file, containing some information about the TDS headers.
-##! Generates the tds_sql_batch.log file, containing some information about the TDS device.
+##! Generates the tds_rpc.log file, containing some information about rpc data.
+##! Generates the tds_sql_batch.log file, containing some information about sql batch data.
 
 module TDS;
 
