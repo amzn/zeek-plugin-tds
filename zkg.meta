@@ -3,4 +3,7 @@ script_dir = scripts
 build_command = ./configure && make
 tags = zeek plugin, protocol analyzer, log writer, tds
 description = Plugin that enables parsing of the Tabular Data Stream (TDS) protocol
+depends =
+  zkg >=2.0
+  zeek >=3.0.0
 
