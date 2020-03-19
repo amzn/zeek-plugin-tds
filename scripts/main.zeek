@@ -170,7 +170,8 @@ event tds_rpc(c: connection, is_orig: bool,
                     params[params_index] = fmt("%s=%s", param_name, param_data);
                     params_index += 1;
                     break;
-                case 0xe7: ##! NVarChar
+                case 0xa7, ##! VarChar
+                    0xe7: ##! NVarChar
                     param_index += 2; ##! max length
                     param_index += 5; ##! collation
                     param_len = bytestring_to_count(parameters[param_index:param_index+2], T);
