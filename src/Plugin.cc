@@ -14,6 +14,6 @@ plugin::Configuration Plugin::Configure() {
     
     plugin::Configuration config;
     config.name = "Zeek::TDS";
-    config.description = "MS-SQL TDS Protocol analyzer";
+    config.description = "MS-SQL TDS protocol analyzer";
     return config;
     }
