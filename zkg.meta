@@ -1,5 +1,5 @@
 [package]
-script_dir = scripts
+script_dir = scripts/TDS
 build_command = ./configure && make
 tags = zeek plugin, protocol analyzer, log writer, tds
 description = Plugin that enables parsing of the Tabular Data Stream (TDS) protocol
