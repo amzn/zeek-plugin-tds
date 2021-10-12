@@ -1,7 +1,7 @@
 #include "Plugin.h"
-#include "analyzer/Component.h"
+#include "zeek/analyzer/Component.h"
 
-namespace plugin { 
+namespace plugin {
     namespace Zeek_TDS {
         Plugin plugin;
         }
@@ -9,10 +9,10 @@ namespace plugin {
 
 using namespace plugin::Zeek_TDS;
 
-plugin::Configuration Plugin::Configure() {
-    AddComponent(new ::analyzer::Component("TDS", ::analyzer::tds::TDS_Analyzer::Instantiate));
-    
-    plugin::Configuration config;
+zeek::plugin::Configuration Plugin::Configure() {
+    AddComponent(new zeek::analyzer::Component("TDS", analyzer::tds::TDS_Analyzer::Instantiate));
+
+    zeek::plugin::Configuration config;
     config.name = "Zeek::TDS";
     config.description = "MS-SQL TDS protocol analyzer";
     return config;

@@ -1,15 +1,15 @@
 #ifndef ZEEK_PLUGIN_ZEEK_TDS
 #define ZEEK_PLUGIN_ZEEK_TDS
 
-#include <plugin/Plugin.h>
+#include <zeek/plugin/Plugin.h>
 #include "TDS.h"
 
 namespace plugin {
     namespace Zeek_TDS {
-        class Plugin : public ::plugin::Plugin {
+        class Plugin : public zeek::plugin::Plugin {
             protected:
                 // Overridden from plugin::Plugin.
-                virtual plugin::Configuration Configure();
+                virtual zeek::plugin::Configuration Configure();
             };
 
         extern Plugin plugin;

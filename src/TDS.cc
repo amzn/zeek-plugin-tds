@@ -1,11 +1,11 @@
 #include "TDS.h"
-#include "analyzer/protocol/tcp/TCP_Reassembler.h"
-#include "Reporter.h"
+#include <zeek/analyzer/protocol/tcp/TCP_Reassembler.h>
+#include <zeek/Reporter.h>
 #include "events.bif.h"
 
 using namespace analyzer::tds;
 
-TDS_Analyzer::TDS_Analyzer(Connection* c): tcp::TCP_ApplicationAnalyzer("TDS", c) {
+TDS_Analyzer::TDS_Analyzer(zeek::Connection* c): zeek::analyzer::tcp::TCP_ApplicationAnalyzer("TDS", c) {
     interp = new binpac::TDS::TDS_Conn(this);
     had_gap = false;
     }
@@ -15,18 +15,18 @@ TDS_Analyzer::~TDS_Analyzer() {
     }
 
 void TDS_Analyzer::Done() {
-    tcp::TCP_ApplicationAnalyzer::Done();
+    zeek::analyzer::tcp::TCP_ApplicationAnalyzer::Done();
     interp->FlowEOF(true);
     interp->FlowEOF(false);
     }
 
 void TDS_Analyzer::EndpointEOF(bool is_orig) {
-    tcp::TCP_ApplicationAnalyzer::EndpointEOF(is_orig);
+    zeek::analyzer::tcp::TCP_ApplicationAnalyzer::EndpointEOF(is_orig);
     interp->FlowEOF(is_orig);
     }
 
 void TDS_Analyzer::DeliverStream(int len, const u_char* data, bool orig) {
-    tcp::TCP_ApplicationAnalyzer::DeliverStream(len, data, orig);
+    zeek::analyzer::tcp::TCP_ApplicationAnalyzer::DeliverStream(len, data, orig);
     assert(TCP());
     //if(TCP()->IsPartial())
     //    return;
@@ -39,12 +39,12 @@ void TDS_Analyzer::DeliverStream(int len, const u_char* data, bool orig) {
         interp->NewData(orig, data, data + len);
         }
     catch(const binpac::Exception& e) {
-        ProtocolViolation(fmt("Binpac exception: %s", e.c_msg()));
+        ProtocolViolation(zeek::util::fmt("Binpac exception: %s", e.c_msg()));
         }
     }
 
 void TDS_Analyzer::Undelivered(uint64_t seq, int len, bool orig) {
-    tcp::TCP_ApplicationAnalyzer::Undelivered(seq, len, orig);
+    zeek::analyzer::tcp::TCP_ApplicationAnalyzer::Undelivered(seq, len, orig);
     had_gap = true;
     interp->NewGap(orig, len);
     }

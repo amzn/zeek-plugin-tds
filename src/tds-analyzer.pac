@@ -1,7 +1,7 @@
 ## Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 ## SPDX-License-Identifier: BSD-3-Clause
 
-connection TDS_Conn(bro_analyzer: BroAnalyzer) {
+connection TDS_Conn(zeek_analyzer: ZeekAnalyzer) {
     upflow   = TDS_Flow(true);
     downflow = TDS_Flow(false);
     };
@@ -19,7 +19,7 @@ connection TDS_Conn(bro_analyzer: BroAnalyzer) {
     #define TDS7_LOGIN        0x10
     #define SSPI_MESSAGE        0x11
     #define TDS7_PRELOGIN        0x12
-    
+
     #define QUERY_NOTIFICATIONS    0x0001
     #define TRANSACTION_DESCRIPTOR    0x0002
     %}
@@ -27,7 +27,7 @@ connection TDS_Conn(bro_analyzer: BroAnalyzer) {
 flow TDS_Flow(is_orig: bool) {
     # flowunit ?
     datagram = TDS_PDU(is_orig) withcontext(connection, this);
-    
+
     function tds(header: TDS): bool %{
         if(::tds) {
             if (${header.command} != SQL_BATCH &&
@@ -44,12 +44,12 @@ flow TDS_Flow(is_orig: bool) {
                 ${header.command} != TDS7_PRELOGIN) {
                 return false;
                 }
-            connection()->bro_analyzer()->ProtocolConfirmation();
-            BifEvent::generate_tds(connection()->bro_analyzer(),
-                            connection()->bro_analyzer()->Conn(),
-                            is_orig(),
-                            ${header.command}
-                            );
+            connection()->zeek_analyzer()->ProtocolConfirmation();
+            zeek::BifEvent::enqueue_tds(connection()->zeek_analyzer(),
+                                        connection()->zeek_analyzer()->Conn(),
+                                        is_orig(),
+                                        ${header.command}
+                                        );
             }
 
         return true;
@@ -57,13 +57,13 @@ flow TDS_Flow(is_orig: bool) {
 
     function tds_rpc(rpc: TDS_RPC): bool %{
         if(::tds_rpc) {
-            connection()->bro_analyzer()->ProtocolConfirmation();
-            BifEvent::generate_tds_rpc(connection()->bro_analyzer(),
-                            connection()->bro_analyzer()->Conn(),
-                            is_orig(),
-                            bytestring_to_val(${rpc.procedure_name}),
-                            bytestring_to_val(${rpc.parameters})
-                            );
+            connection()->zeek_analyzer()->ProtocolConfirmation();
+            zeek::BifEvent::enqueue_tds_rpc(connection()->zeek_analyzer(),
+                                            connection()->zeek_analyzer()->Conn(),
+                                            is_orig(),
+                                            to_stringval(${rpc.procedure_name}),
+                                            to_stringval(${rpc.parameters})
+                                            );
             }
 
         return true;
@@ -75,13 +75,13 @@ flow TDS_Flow(is_orig: bool) {
                 ${sqlBatch.stream_header.header_type} != TRANSACTION_DESCRIPTOR) {
                 return false;
                 }
-            connection()->bro_analyzer()->ProtocolConfirmation();
-            BifEvent::generate_tds_sql_batch(connection()->bro_analyzer(),
-                                connection()->bro_analyzer()->Conn(),
-                                is_orig(),
-                                ${sqlBatch.stream_header.header_type},
-                                bytestring_to_val(${sqlBatch.query})
-                                );
+            connection()->zeek_analyzer()->ProtocolConfirmation();
+            zeek::BifEvent::enqueue_tds_sql_batch(connection()->zeek_analyzer(),
+                                                  connection()->zeek_analyzer()->Conn(),
+                                                  is_orig(),
+                                                  ${sqlBatch.stream_header.header_type},
+                                                  to_stringval(${sqlBatch.query})
+                                                  );
             }
 
         return true;
