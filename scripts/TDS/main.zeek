@@ -25,6 +25,7 @@ export {
         };
     ## Event that can be handled to access the tds record as it is sent to the loggin framework.
     global log_tds: event(rec: TDS);
+    global log_policy: Log::PolicyHook;
 
     ## Remote Procedure Call
     type TDS_RPC: record {
@@ -37,6 +38,7 @@ export {
         };
     ## Event that can be handled to access the tds record as it is sent to the loggin framework.
     global log_tds_rpc: event(rec: TDS_RPC);
+    global log_policy_rpc: Log::PolicyHook;
 
     ## SQL Batch
     type TDS_SQL_Batch: record {
@@ -49,6 +51,7 @@ export {
         };
     ## Event that can be handled to access the tds record as it is sent to the loggin framework.
     global log_tds_sql_batch: event(rec: TDS_SQL_Batch);
+    global log_policy_sql_batch: Log::PolicyHook;
     }
 
 redef record connection += {
@@ -69,15 +72,18 @@ event zeek_init() &priority=5 {
     Log::create_stream(TDS::Log_TDS,
                         [$columns=TDS,
                         $ev=log_tds,
-                        $path="tds"]);
+                        $path="tds",
+                        $policy=log_policy]);
     Log::create_stream(TDS::Log_TDS_RPC,
                         [$columns=TDS_RPC,
                         $ev=log_tds_rpc,
-                        $path="tds_rpc"]);
+                        $path="tds_rpc",
+                        $policy=log_policy_rpc]);
     Log::create_stream(TDS::Log_TDS_SQL_Batch,
                         [$columns=TDS_SQL_Batch,
                         $ev=log_tds_sql_batch,
-                        $path="tds_sql_batch"]);
+                        $path="tds_sql_batch",
+                        $policy=log_policy_sql_batch]);
     Analyzer::register_for_ports(Analyzer::ANALYZER_TDS, ports);
     }
 
