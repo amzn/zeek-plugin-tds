@@ -39,7 +39,7 @@ void TDS_Analyzer::DeliverStream(int len, const u_char* data, bool orig) {
         interp->NewData(orig, data, data + len);
         }
     catch(const binpac::Exception& e) {
-        ProtocolViolation(zeek::util::fmt("Binpac exception: %s", e.c_msg()));
+        AnalyzerViolation(zeek::util::fmt("Binpac exception: %s", e.c_msg()));
         }
     }
 
