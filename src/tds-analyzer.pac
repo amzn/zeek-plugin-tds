@@ -44,7 +44,7 @@ flow TDS_Flow(is_orig: bool) {
                 ${header.command} != TDS7_PRELOGIN) {
                 return false;
                 }
-            connection()->zeek_analyzer()->ProtocolConfirmation();
+            connection()->zeek_analyzer()->AnalyzerConfirmation();
             zeek::BifEvent::enqueue_tds(connection()->zeek_analyzer(),
                                         connection()->zeek_analyzer()->Conn(),
                                         is_orig(),
@@ -57,7 +57,7 @@ flow TDS_Flow(is_orig: bool) {
 
     function tds_rpc(rpc: TDS_RPC): bool %{
         if(::tds_rpc) {
-            connection()->zeek_analyzer()->ProtocolConfirmation();
+            connection()->zeek_analyzer()->AnalyzerConfirmation();
             zeek::BifEvent::enqueue_tds_rpc(connection()->zeek_analyzer(),
                                             connection()->zeek_analyzer()->Conn(),
                                             is_orig(),
@@ -75,7 +75,7 @@ flow TDS_Flow(is_orig: bool) {
                 ${sqlBatch.stream_header.header_type} != TRANSACTION_DESCRIPTOR) {
                 return false;
                 }
-            connection()->zeek_analyzer()->ProtocolConfirmation();
+            connection()->zeek_analyzer()->AnalyzerConfirmation();
             zeek::BifEvent::enqueue_tds_sql_batch(connection()->zeek_analyzer(),
                                                   connection()->zeek_analyzer()->Conn(),
                                                   is_orig(),
